@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>图片展示</title>
+</head>
+<body>
+    <h1>图片展示</h1>
+    <div id="image-container">
+        <img id="previous-image" src="" alt="上一张图片">
+        <img id="current-image" src="" alt="当前图片">
+        <img id="next-image" src="" alt="下一张图片">
+    </div>
+    <button id="previous-button">上一张</button>
+    <button id="next-button">下一张</button>
+
+    <script>
+        const imageContainer = document.getElementById("image-container");
+        const previousImage = document.getElementById("previous-image");
+        const currentImage = document.getElementById("current-image");
+        const nextImage = document.getElementById("next-image");
+        const previousButton = document.getElementById("previous-button");
+        const nextButton = document.getElementById("next-button");
+
+        let currentIndex = 0;
+        let images = [];
+
+        // 获取当前目录下的img文件夹
+        const imgFolder = "img";
+
+        // 获取img文件夹下的所有图片文件
+        const imageFiles = fs.readdirSync(imgFolder).filter(file => {
+            return file.endsWith(".jpg") || file.endsWith(".png") || file.endsWith(".webp") || file.endsWith(".gif") || file.endsWith(".jpeg") || file.endsWith(".bmp");
+        });
+
+        // 将图片文件添加到images数组中
+        images = imageFiles.map(file => {
+            return `${imgFolder}/${file}`;
+        });
+
+        // 获取第一张图片
+        const firstImage = images[0];
+
+        // 设置第一张图片为currentImage
+        currentImage.src = firstImage;
+
+        // 设置上一张和下一张图片的src
+        if (images.length > 1) {
+            previousImage.src = images[1];
+            nextImage.src = images[0];
+        }
+
+        // 绑定上一张和下一张按钮的点击事件
+        previousButton.addEventListener("click", () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                const currentImageSrc = images[currentIndex];
+                previousImage.src = currentImageSrc;
+                nextImage.src = images[currentIndex + 1];
+                currentImage.src = currentImageSrc;
+            }
+        });
+
+        nextButton.addEventListener("click", () => {
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+                const currentImageSrc = images[currentIndex];
+                previousImage.src = images[currentIndex - 1];
+                nextImage.src = images[currentIndex + 1];
+                currentImage.src = currentImageSrc;
+            }
+        });
+    </script>
+</body>
+</html>
